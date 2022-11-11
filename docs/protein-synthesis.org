@@ -1,0 +1,206 @@
+In our model of protein synthesis we have mRNA, tRNA, aminoacid,
+protein, and ribosome Petri nets.
+# To produce one kind of protein we need (at least) one protein net of
+# that type (and its respective aminoacid nets), one mRNA net encoding
+# that protein (and its respective tRNA nets), and one ribosome
+# net. To produce several different proteins we only /need/ to have
+# one ribosome, but we need as many different protein and mRNA nets as
+# the number of different proteins we want to produce (and their
+# respective aminoacid and tRNA nets).
+
+** mRNA
+The [[https://en.wikipedia.org/wiki/Messenger_RNA][mRNA]] petri net is just a chain of places representing
+nucleotides. The transitions connecting them have labels synchronizing
+them with their matching tRNA, so that the token will only transition
+together with token in a matching tRNA (i.e. that contains the
+anticodon to the mRNA's codon).
+
+- [ ] Can we really synchronize like this if we have several tRNAs in
+  the universe?
+- [ ] Previously we thought of having the label match the nucleotide,
+  but then if we have a tRNA that matches the first nucleotide and not
+  the second we would make one transition, which is not what we want,
+  right? so we'd need to have one label for each combination of index
+  and codon (i.e., [1, ATT], or [3, CTC])?
+
+#+BEGIN_SRC dot :file ../imgs/mRNA.png :exports results
+  digraph mRNA {
+
+  graph [compound=true];
+  rankdir=LR;
+  bgcolor="transparent"
+
+  subgraph cluster_mRNA {
+          label="mRNA"
+          margin=14;
+          node [shape=circle];
+          mrna_p1[label="●"];
+          mrna_p2[label=""];
+          mrna_p3[label=""];
+          mrna_p4[label=""];
+          mrna_p5[label=""];
+          mrna_p6[label=""];
+          mrna_dots[label="…",shape=plaintext];
+          mrna_dots2[label="…",shape=plaintext];
+          node [shape=box, width=0.1];
+          mrna_t1[label="",xlabel="b₁"];
+          mrna_t2[label="",xlabel="b₂"];
+          mrna_t3[label="",xlabel="b₃"];
+          mrna_t4[label="",xlabel="b₃ₙ₊₁"];
+          mrna_t5[label="",xlabel="b₃ₙ₊₂"];
+          mrna_t6[label="",xlabel="b₃ₙ₊₃"];
+          mrna_p1->mrna_t1->mrna_p2->mrna_t2->mrna_p3->mrna_t3->mrna_dots->mrna_p4->mrna_t4->mrna_p5->mrna_t5->mrna_p6->mrna_t6->mrna_dots2;
+  }
+
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:imgs/mRNA.png]]
+
+** tRNA
+A [[https://en.wikipedia.org/wiki/Transfer_RNA][tRNA]] net is 3-element chain of places representing nucleotides,
+followed by a single place representing the aminoacid carried by the
+tRNA. Its first 3 transitions have labels that synchronize with the
+transitions on the [[*Ribosome][ribosome]] and on the mRNA, making sure that each
+nucleotide from the tRNA is processed by the ribosome as the
+corresponding nucleotide from the mRNA is processed.
+
+#+BEGIN_SRC dot :file ../imgs/tRNA.png :exports results
+  digraph tRNA {
+
+  graph [compound=true];
+  rankdir=LR;
+  bgcolor="transparent"
+
+  subgraph cluster_tRNA {
+          label="tRNA"
+          margin=14;
+          node [shape=circle];
+          trna_p1[label="●"];
+          trna_p2[label=""];
+          trna_p3[label=""];
+          trna_p4[label=""];
+          trna_p5[label=""];
+          node [shape=box, width=0.1];
+          trna_t1[label="",xlabel="1,B₃ₖ₊₁"];
+          trna_t2[label="",xlabel="2,B₃ₖ₊₂"];
+          trna_t3[label="",xlabel="3,B₃ₖ₊₃"];
+          trna_t4[label="",xlabel="A"];
+          trna_p1->trna_t1->trna_p2->trna_t2->trna_p3->trna_t3->trna_p4->trna_t4->trna_p5;
+  }
+
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:imgs/tRNA.png]]
+
+** Protein
+Proteins are represented by a series of aminoacid nets. The token of
+each net is/represents the previous aminoacid net.
+
+- [ ] Describe the proviso for the aminoacid petri net transitions and
+  what they mean.
+  - Are the provisos that a matching aminoacid has been produced by the ribosome?
+    - If so, how do we control for when we have several ribosomes
+      exist and some proteins have some aminoacids in common? Or even
+      repeat aminoacids in the same protein? To distinguish we need
+      both the protein, the aminoacid, and the index information.
+  - Is the meaning that the the protein has been assembled up to that
+    point?
+#+BEGIN_SRC dot :file ../imgs/ptn.png :exports results
+  digraph ptn {
+
+  graph [compound=true];
+  rankdir=LR;
+  bgcolor="transparent"
+
+  subgraph cluster_aa {
+    label="PTN"
+    margin=14;
+    node [shape=circle];
+    amino_n_p1[label=""];
+    amino_n_p2[label=" "];
+    node [shape=box, width=0.1];
+    amino_n_t1[label=""];
+    amino_n_p1->amino_n_t1->amino_n_p2;
+  }
+
+  subgraph dots {
+    nop[label="     …",labelloc=b,shape=plaintext];
+  }
+
+  subgraph cluster_aa2 {
+    label="Aminoacid₂";
+    node [shape=circle];
+    amino_2_p1[label=""];
+    amino_2_p2[label=" "];
+    node [shape=box, width=0.1];
+    amino_2_t1[label=""];
+    amino_2_p1->amino_2_t1->amino_2_p2;
+  }
+
+  subgraph cluster_aa1 {
+    label="Aminoacid₁";
+    node [shape=circle];
+    amino_1_p1[label="●"];
+    amino_1_p2[label=" "];
+    node [shape=box, width=0.1];
+    amino_1_t1[label=""];
+    amino_1_p1->amino_1_t1->amino_1_p2;
+  }
+
+  nop->amino_n_p1[ltail=dots,label="",arrowhead=dot,headclip=false];
+  amino_1_p1->amino_2_p1[ltail=cluster_aa1,label="",arrowhead=dot,headclip=false];
+  amino_2_p1->nop[ltail=cluster_aa2,label="",arrowhead=none,headclip=false];
+
+  }
+#+END_SRC
+
+#+RESULTS:
+[[file:imgs/ptn.png]]
+
+
+** Ribosome
+The ribossome is the central piece of translation. The places labeled
+by =mRNA=, =tRNA=, and =PTN= have those nets as tokens.
+
+- [ ] give a fuller description
+#+BEGIN_SRC dot :file ../imgs/ribo.png :exports results
+    digraph ribo {
+
+    graph [compound=true];
+    rankdir=LR;
+    bgcolor="transparent"
+
+    subgraph cluster_ribo {
+            label="Ribosome"
+            margin=14;
+            node [shape=circle];
+            ribo_mrna[label="●",xlabel="mRNA"];
+            ribo_trna[label="⠿",xlabel="tRNA"];
+            ribo_ptn[label="",xlabel="PTN"]
+            ribo_p1[label=""];
+            ribo_p2[label=""];
+            ribo_p3[label=""];
+            node [shape=box, width=0.1];
+            ribo_t1[label="",xlabel="1"];
+            ribo_t2[label="",xlabel="2"];
+            ribo_t3[label="",xlabel="3"];
+            ribo_t_aa[label="",xlabel="A"];
+            {ribo_mrna ribo_trna}->ribo_t1;
+            ribo_t1->ribo_p1->ribo_t2->ribo_p2->ribo_t3->ribo_p3;
+            {ribo_ptn ribo_p3}->ribo_t_aa;
+            ribo_t_aa->ribo_ptn;
+    }
+
+    }
+#+END_SRC
+
+#+RESULTS:
+[[file:imgs/ribo.png]]
+
+# Local Variables:
+# indent-tabs-mode: nil
+# End:
