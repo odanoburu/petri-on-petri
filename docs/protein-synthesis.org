@@ -55,9 +55,6 @@ anticodon to the mRNA's codon).
   }
 #+END_SRC
 
-#+RESULTS:
-[[file:imgs/mRNA.png]]
-
 ** tRNA
 A [[https://en.wikipedia.org/wiki/Transfer_RNA][tRNA]] net is 3-element chain of places representing nucleotides,
 followed by a single place representing the aminoacid carried by the
@@ -92,9 +89,6 @@ corresponding nucleotide from the mRNA is processed.
 
   }
 #+END_SRC
-
-#+RESULTS:
-[[file:imgs/tRNA.png]]
 
 ** Protein
 Proteins are represented by a series of aminoacid nets. The token of
@@ -158,9 +152,6 @@ each net is/represents the previous aminoacid net.
   }
 #+END_SRC
 
-#+RESULTS:
-[[file:imgs/ptn.png]]
-
 
 ** Ribosome
 The ribossome is the central piece of translation. The places labeled
@@ -197,9 +188,6 @@ by =mRNA=, =tRNA=, and =PTN= have those nets as tokens.
 
     }
 #+END_SRC
-
-#+RESULTS:
-[[file:imgs/ribo.png]]
 
 # Local Variables:
 # indent-tabs-mode: nil
