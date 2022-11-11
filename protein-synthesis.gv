@@ -33,13 +33,13 @@ subgraph cluster_ribo_1 {
         ribo1_p1[label=""];
         ribo1_p2[label=""];
         ribo1_p3[label=""];
-        ribo1_amino[label="Amino",shape=plain];
+        // ribo1_amino[label="Amino",shape=plain];
         node [shape=box, width=0.1];
         ribo1_t1[label="",xlabel="1"];
         ribo1_t2[label="",xlabel="2"];
         ribo1_t3[label="",xlabel="3"];
         ribo1_p1->ribo1_t1->ribo1_p2->ribo1_t2->ribo1_p3->ribo1_t3->ribo1_p1;
-        ribo1_t3->ribo1_amino;
+        // ribo1_t3->ribo1_amino;
 }
 
 subgraph cluster_ribo_2 {
@@ -49,41 +49,43 @@ subgraph cluster_ribo_2 {
         ribo2_p1[label=""];
         ribo2_p2[label=""];
         ribo2_p3[label=""];
-        ribo2_amino[label="Amino",shape=plain];
+        // ribo2_amino[label="Amino",shape=plain];
         node [shape=box, width=0.1];
         ribo2_t1[label="",xlabel="1"];
         ribo2_t2[label="",xlabel="2"];
         ribo2_t3[label="",xlabel="3"];
         ribo2_p1->ribo2_t1->ribo2_p2->ribo2_t2->ribo2_p3->ribo2_t3->ribo2_p1;
-        ribo2_t3->ribo2_amino;
+        // ribo2_t3->ribo2_amino;
 }
 
 subgraph cluster_tRNA_1 {
-        label="rRNA₁";
+        label="tRNA₁";
         margin=14;
 	node [shape=circle];
         trna1_p1[label="●"];
         trna1_p2[label=""];
         trna1_p3[label=""];
+        trna1_amino[label="",xlabel="Amino"];
         node [shape=box, width=0.1];
         trna1_t1[label="",xlabel="<b₁,1>"];
         trna1_t2[label="",xlabel="<b₂,2>"];
         trna1_t3[label="",xlabel="<b₃,3>"];
-        trna1_p1->trna1_t1->trna1_p2->trna1_t2->trna1_p3->trna1_t3->trna1_p1;
+        trna1_p1->trna1_t1->trna1_p2->trna1_t2->trna1_p3->trna1_t3->trna1_amino;
 }
 
 subgraph cluster_tRNA_2 {
-        label="rRNA2";
+        label="tRNA2";
         margin=14;
 	node [shape=circle];
         trna2_p1[label="●"];
         trna2_p2[label=""];
         trna2_p3[label=""];
+        trna2_amino[label="",xlabel="Amino"];
         node [shape=box, width=0.1];
         trna2_t1[label="",xlabel="<b₄,1>"];
         trna2_t2[label="",xlabel="<b₅,2>"];
         trna2_t3[label="",xlabel="<b₆,3>"];
-        trna2_p1->trna2_t1->trna2_p2->trna2_t2->trna2_p3->trna2_t3->trna2_p1;
+        trna2_p1->trna2_t1->trna2_p2->trna2_t2->trna2_p3->trna2_t3->trna2_amino;
 }
 
 trna1_p1->ribo1_p1[ltail=cluster_tRNA_1,label="",headclip=false,arrowhead=dot];
